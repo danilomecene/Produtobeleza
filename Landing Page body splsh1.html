@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Diamond Cosméticos – Love Spell</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    * { box-sizing:border-box; margin:0; padding:0; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: radial-gradient(circle at top center, #240d1a 0%, #11050b 100%);
+      color: #e5d8e0;
+      line-height: 1.5;
+      min-height: 100vh;
+      perspective: 1000px;
+    }
+    
+    a { text-decoration:none; color:inherit; }
+    img, video { max-width:100%; display:block; height:auto; }
+
+    .page { max-width:1000px; margin:0 auto; padding:30px 16px 50px; }
+
+    /* Cabeçalho */
+    header { text-align:center; margin-bottom:32px; }
+    header small {
+      display:inline-block;
+      font-size:0.75rem;
+      letter-spacing:0.25em;
+      text-transform:uppercase;
+      color:#d4af37;
+      font-weight: 700;
+      margin-bottom:8px;
+      text-shadow: 0 2px 10px rgba(212, 175, 55, 0.3);
+    }
+    header h1 {
+      font-size:2.3rem;
+      font-weight: 400;
+      color:#ffffff;
+      margin-bottom:8px;
+      text-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    }
+    header p {
+      font-size:0.92rem;
+      color:#a38f9c;
+    }
+
+    /* Container Principal Efeito 3D Glass */
+    .main-card {
+      background: rgba(30, 12, 21, 0.75);
+      backdrop-filter: blur(12px);
+      border-radius: 24px;
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      padding: 30px;
+      margin-bottom: 28px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    }
+
+    .hero-grid {
+      display:grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap:28px;
+      align-items: start;
+    }
+    @media (max-width:850px){
+      .hero-grid { grid-template-columns:1fr; }
+      header h1 { font-size: 1.8rem; }
+    }
+
+    .badge {
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-size:0.75rem;
+      padding:6px 16px;
+      border-radius:999px;
+      background: rgba(212, 175, 55, 0.12);
+      border:1px solid rgba(212, 175, 55, 0.4);
+      color:#d4af37;
+      font-weight: 600;
+      margin-bottom:16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .badge span.dot {
+      width:6px; height:6px; border-radius:999px; background:#d4af37;
+      box-shadow: 0 0 8px #d4af37;
+    }
+
+    .hero-copy h2 {
+      font-size:1.65rem;
+      color:#ffffff;
+      font-weight: 500;
+      margin-bottom:12px;
+      line-height: 1.3;
+    }
+    .hero-copy p {
+      font-size:0.9rem;
+      color:#a38f9c;
+      margin-bottom:20px;
+    }
+
+    /* Moldura com Zoom e Efeito 3D */
+    .img-box-main {
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      background: #0d0509;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+      transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+      cursor: pointer;
+    }
+    .img-box-main:hover, .img-box-main:active {
+      transform: scale(1.03) translateZ(10px);
+      border-color: #d4af37;
+      box-shadow: 0 20px 40px rgba(212, 175, 55, 0.25);
+    }
+    .img-box-main img, .img-box-main video {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+    }
+
+    /* Bloco Direito */
+    .side-block {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    /* Botão Dourado 3D */
+    .btn-gold {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:16px 28px;
+      border-radius:999px;
+      border:none;
+      cursor:pointer;
+      font-size:0.88rem;
+      font-weight:800;
+      letter-spacing:0.12em;
+      text-transform:uppercase;
+      background: linear-gradient(135deg, #f5d77f 0%, #d4af37 50%, #996515 100%);
+      color:#12070c;
+      box-shadow: 0 10px 25px rgba(212, 175, 55, 0.35), 0 4px 0 #7a5210;
+      transition: all 0.2s ease;
+      width: 100%;
+      text-align: center;
+    }
+    .btn-gold:hover, .btn-gold:active {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(212, 175, 55, 0.5), 0 2px 0 #7a5210;
+    }
+
+    .section-title {
+      font-size: 1.35rem;
+      color: #ffffff;
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+    .section-sub {
+      font-size: 0.85rem;
+      color: #a38f9c;
+      margin-bottom: 22px;
+    }
+
+    /* SEÇÃO DE BENEFÍCIOS 3D */
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 18px;
+      margin-top: 16px;
+    }
+    .benefit-card {
+      background: rgba(20, 8, 14, 0.8);
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      border-radius: 16px;
+      padding: 18px;
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+    .benefit-card:hover {
+      transform: translateY(-5px) scale(1.02);
+      border-color: rgba(212, 175, 55, 0.6);
+      box-shadow: 0 12px 25px rgba(212, 175, 55, 0.15);
+    }
+    .benefit-icon {
+      font-size: 1.6rem;
+      margin-bottom: 10px;
+    }
+    .benefit-card h3 {
+      font-size: 0.95rem;
+      color: #d4af37;
+      margin-bottom: 6px;
+    }
+    .benefit-card p {
+      font-size: 0.82rem;
+      color: #a38f9c;
+    }
+
+    /* SEÇÃO DE KITS COM EFITO 3D */
+    .offers-grid {
+      display:grid;
+      grid-template-columns:1fr;
+      gap:20px;
+    }
+    @media (min-width:640px){
+      .offers-grid { grid-template-columns:repeat(3, minmax(0, 1fr)); }
+    }
+
+    .offer-card {
+      background: rgba(20, 8, 14, 0.85);
+      border-radius: 20px;
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      padding: 20px 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 12px;
+      transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+      cursor: pointer;
+      position: relative;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+      transform-style: preserve-3d;
+    }
+
+    /* Efeito de Elevação e Rotação 3D ao Passar o Dedo/Mouse */
+    .offer-card:hover, .offer-card:active {
+      transform: translateY(-8px) rotateX(4deg) scale(1.03);
+      border-color: #d4af37;
+      box-shadow: 0 20px 40px rgba(212, 175, 55, 0.3);
+    }
+
+    .offer-card.highlight {
+      border-color: #d4af37;
+      box-shadow: 0 10px 30px rgba(212, 175, 55, 0.2);
+      background: rgba(25, 10, 18, 0.95);
+    }
+
+    .offer-tag {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      color: #d4af37;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
+    .offer-name {
+      font-size: 0.98rem;
+      font-weight: 600;
+      color: #ffffff;
+    }
+    .offer-desc {
+      font-size: 0.78rem;
+      color: #a38f9c;
+    }
+
+    /* CONTAINER COMPOSIÇÃO DE PRODUTOS 3D (1, 3 e 6 FRASCOS) */
+    .product-display-3d {
+      width: 100%;
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      margin: 8px 0;
+    }
+
+    /* Estilo para 1 Frasco */
+    .bottle-single {
+      width: 75px;
+      height: 105px;
+      border-radius: 12px;
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      object-fit: cover;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+    }
+
+    /* Estilo para 3 Frascos Sobrepostos em 3D */
+    .bottles-3-stack {
+      position: relative;
+      width: 130px;
+      height: 110px;
+    }
+    .bottles-3-stack img {
+      position: absolute;
+      width: 65px;
+      height: 95px;
+      border-radius: 10px;
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      object-fit: cover;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.6);
+      transition: transform 0.3s ease;
+    }
+    .bottles-3-stack img.b1 { left: 0; top: 10px; transform: rotate(-10deg); z-index: 1; }
+    .bottles-3-stack img.b2 { left: 32px; top: 0px; z-index: 2; transform: scale(1.05); }
+    .bottles-3-stack img.b3 { right: 0; top: 10px; transform: rotate(10deg); z-index: 1; }
+
+    /* Estilo para 6 Frascos (Grade Composta 3D) */
+    .bottles-6-stack {
+      position: relative;
+      width: 150px;
+      height: 110px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .bottles-6-stack img {
+      position: absolute;
+      width: 50px;
+      height: 75px;
+      border-radius: 8px;
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      object-fit: cover;
+      box-shadow: 0 5px 12px rgba(0,0,0,0.7);
+    }
+    /* Fila de Trás */
+    .bottles-6-stack .bg1 { left: 5px; top: 0px; opacity: 0.85; transform: scale(0.9); z-index: 1; }
+    .bottles-6-stack .bg2 { left: 50px; top: -5px; opacity: 0.85; transform: scale(0.9); z-index: 1; }
+    .bottles-6-stack .bg3 { right: 5px; top: 0px; opacity: 0.85; transform: scale(0.9); z-index: 1; }
+    /* Fila da Frente */
+    .bottles-6-stack .fg1 { left: 18px; top: 25px; z-index: 2; transform: rotate(-5deg); }
+    .bottles-6-stack .fg2 { left: 50px; top: 22px; z-index: 3; transform: scale(1.05); }
+    .bottles-6-stack .fg3 { right: 18px; top: 25px; z-index: 2; transform: rotate(5deg); }
+
+    .offer-price {
+      font-size: 1.3rem;
+      color: #d4af37;
+      font-weight: 800;
+      text-shadow: 0 2px 10px rgba(212, 175, 55, 0.2);
+    }
+    .offer-price small {
+      display: block;
+      font-size: 0.72rem;
+      color: #a38f9c;
+      font-weight: 400;
+    }
+
+    .btn-outline-gold {
+      display: inline-block;
+      width: 100%;
+      padding: 11px;
+      border-radius: 999px;
+      border: 1px solid #d4af37;
+      background: transparent;
+      color: #d4af37;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    .offer-card:hover .btn-outline-gold,
+    .btn-outline-gold:hover {
+      background: linear-gradient(135deg, #d4af37 0%, #b8860b 100%);
+      color: #12070c;
+      box-shadow: 0 6px 15px rgba(212, 175, 55, 0.4);
+    }
+
+    /* SEÇÃO DE PROVA SOCIAL 3D */
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
+      margin-top: 16px;
+    }
+    .review-card {
+      background: rgba(20, 8, 14, 0.8);
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      border-radius: 16px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      transition: transform 0.3s ease;
+    }
+    .review-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(212, 175, 55, 0.4);
+    }
+    .review-stars {
+      color: #d4af37;
+      font-size: 0.9rem;
+      text-shadow: 0 0 5px rgba(212, 175, 55, 0.5);
+    }
+    .review-text {
+      font-size: 0.82rem;
+      color: #e5d8e0;
+      font-style: italic;
+    }
+    .review-author {
+      font-size: 0.78rem;
+      color: #d4af37;
+      font-weight: 700;
+    }
+
+    footer {
+      text-align:center;
+      font-size:0.75rem;
+      color:#5a4a55;
+      margin-top:20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <small>DIAMOND COSMÉTICOS</small>
+      <h1>Love Spell Body Splash</h1>
+      <p>Fragrância marcante que desperta sua essência com toques de orquídeas e alta fixação.</p>
+    </header>
+
+    <main>
+      <!-- HERO PRINCIPAL 3D -->
+      <section class="main-card">
+        <div class="hero-grid">
+          <div class="hero-left">
+            <div class="badge">
+              <span class="dot"></span>
+              Edição Exclusiva – 200 ml
+            </div>
+            <h2>Sinta a experiência de um perfume marcante o dia todo</h2>
+            <p>
+              O Love Spell combina notas florais envolventes e acabamento aveludado na pele. Projetado para quem busca sofisticação e presença marcante.
+            </p>
+            <div class="img-box-main">
+              <img src="Bodysplash1.jpg.jpeg" alt="Love Spell Body Splash">
+            </div>
+          </div>
+
+          <!-- DIREITA COM VÍDEO -->
+          <div class="side-block">
+            <div class="img-box-main">
+              <video src="Sup sex criativo 1 video pt.mp4" controls playsinline preload="metadata" poster="Bodysplash1.jpg.jpeg"></video>
+            </div>
+            <a href="#kits" class="btn-gold">GARANTIR MEU FRASCO</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- SEÇÃO DE BENEFÍCIOS -->
+      <section class="main-card">
+        <h2 class="section-title">Por que o Love Spell é perfeito para você?</h2>
+        <p class="section-sub">Desenvolvido com ingredientes de altíssima qualidade para garantir uma experiência única.</p>
+
+        <div class="benefits-grid">
+          <div class="benefit-card">
+            <div class="benefit-icon">✨</div>
+            <h3>Alta Fixação</h3>
+            <p>Fórmula desenvolvida para manter a fragrância viva na pele durante várias horas do dia.</p>
+          </div>
+          <div class="benefit-card">
+            <div class="benefit-icon">🌸</div>
+            <h3>Fragrância Envolvente</h3>
+            <p>Combinação perfeita de notas florais de orquídea com um toque suave e marcante.</p>
+          </div>
+          <div class="benefit-card">
+            <div class="benefit-icon">💧</div>
+            <h3>Toque Aveludado</h3>
+            <p>Sensação de frescor imediato e maciez ao borrifar na pele após o banho.</p>
+          </div>
+          <div class="benefit-card">
+            <div class="benefit-icon">💎</div>
+            <h3>Qualidade Premium</h3>
+            <p>Frasco elegante de 200ml com borrifador de alta precisão que rende muito mais.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- KITS COM EXIBIÇÃO DE 1, 3 E 6 FRASCOS EM 3D -->
+      <section class="main-card" id="kits">
+        <h2 class="section-title">Escolha a sua coleção Love Spell</h2>
+        <p class="section-sub">Frete seguro com código de rastreamento enviado por e-mail.</p>
+
+        <div class="offers-grid">
+          <!-- KIT 1 FRASCO -->
+          <article class="offer-card">
+            <div class="offer-tag">EXPERIMENTE</div>
+            <div class="offer-name">1 Frasco – 200ml</div>
+            <div class="offer-desc">Perfeito para carregar na bolsa e usar diariamente.</div>
+            
+            <div class="product-display-3d">
+              <img src="Bodysplash1.jpg.jpeg" alt="1 Frasco Love Spell" class="bottle-single">
+            </div>
+
+            <div class="offer-price">
+              R$ 40,00 <small>à vista no PIX ou cartão</small>
+            </div>
+            <a href="checkout-sup-sexual-pt.html?kit=1" class="btn-outline-gold">COMPRAR 1 FRASCO</a>
+          </article>
+
+          <!-- KIT 3 FRASCOS (COMPOSIÇÃO 3D COM 3 UNIDADES) -->
+          <article class="offer-card highlight">
+            <div class="offer-tag">MAIS DESEJADO</div>
+            <div class="offer-name">3 Frascos – Kit Triplo</div>
+            <div class="offer-desc">Custo-benefício ideal para o uso do dia a dia.</div>
+            
+            <div class="product-display-3d">
+              <div class="bottles-3-stack">
+                <img src="Bodysplash1.jpg.jpeg" alt="Frasco 1" class="b1">
+                <img src="Bodysplash1.jpg.jpeg" alt="Frasco 2" class="b2">
+                <img src="Bodysplash1.jpg.jpeg" alt="Frasco 3" class="b3">
+              </div>
+            </div>
+
+            <div class="offer-price">
+              R$ 120,00 <small>(R$ 40,00 por frasco)</small>
+            </div>
+            <a href="checkout-sup-sexual-pt.html?kit=3" class="btn-outline-gold">COMPRAR 3 FRASCOS</a>
+          </article>
+
+          <!-- KIT 6 FRASCOS (COMPOSIÇÃO 3D COM 6 UNIDADES) -->
+          <article class="offer-card">
+            <div class="offer-tag">MELHOR VALOR</div>
+            <div class="offer-name">6 Frascos – Coleção Completa</div>
+            <div class="offer-desc">O menor valor por frasco para garantir seu estoque.</div>
+            
+            <div class="product-display-3d">
+              <div class="bottles-6-stack">
+                <!-- Fila de trás -->
+                <img src="Bodysplash1.jpg.jpeg" alt="Frasco 1" class="bg1">
+                <img src="Bodysplash1.jpg.jpeg" alt="Frasco 2" class="bg2">
+                <img src="Bodysplash1.jpg.jpeg" alt="Frasco 3" class="bg3">
+                <!-- Fila da frente -->
+                <img src="Bodysplash1.jpg.jpeg" alt="Frasco 4" class="fg1">
+                <img src="Bodysplash1.jpg.jpeg" alt="Frasco 5" class="fg2">
+                <img src="Bodysplash1.jpg.jpeg" alt="Frasco 6" class="fg3">
+              </div>
+            </div>
+
+            <div class="offer-price">
+              R$ 210,00 <small>(R$ 35,00 por frasco)</small>
+            </div>
+            <a href="checkout-sup-sexual-pt.html?kit=6" class="btn-outline-gold">COMPRAR 6 FRASCOS</a>
+          </article>
+        </div>
+      </section>
+
+      <!-- PROVA SOCIAL -->
+      <section class="main-card">
+        <h2 class="section-title">O que nossas clientes estão dizendo</h2>
+        <p class="section-sub">Avaliação média de 4.9/5 ★★★★★ baseada em mais de 1.200 entregas em todo o Brasil.</p>
+
+        <div class="reviews-grid">
+          <div class="review-card">
+            <div class="review-stars">★★★★★</div>
+            <p class="review-text">"Gente, a fixação desse perfume é maravilhosa! Aplico de manhã antes de ir trabalhar e de noite ainda sinto o cheirinho na roupa. Chegou super rápido!"</p>
+            <div class="review-author">― Juliana M., São Paulo / SP</div>
+          </div>
+
+          <div class="review-card">
+            <div class="review-stars">★★★★★</div>
+            <p class="review-text">"Comprei o kit com 3 frascos para dar de presente para minhas irmãs e todo mundo amou. O cheiro é marcante sem ser enjoativo. Recomendo demais!"</p>
+            <div class="review-author">― Camila R., Belo Horizonte / MG</div>
+          </div>
+
+          <div class="review-card">
+            <div class="review-stars">★★★★★</div>
+            <p class="review-text">"Nota 10! Embalagem impecável, muito bem protegido e o Body Splash cumpre tudo o que promete. Já vou pedir o kit maior da próxima vez."</p>
+            <div class="review-author">― Fernanda S., Curitiba / PR</div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      © Diamond Cosméticos. Todos os direitos reservados.
+    </footer>
+  </div>
+</body>
+</html>
