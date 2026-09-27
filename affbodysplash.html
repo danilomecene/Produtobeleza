@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Programa de Afiliados - Love Spell Body Splash</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #0b0b0b; color: #fff; padding: 20px; }
+    .box { max-width: 800px; margin: 30px auto; background: #12091f; border: 1px solid #d4af37; border-radius: 16px; padding: 30px; }
+    h1, h2 { color: #d4af37; }
+    table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    th, td { border: 1px solid #333; padding: 12px; text-align: left; }
+    th { background: #1c102b; color: #d4af37; }
+    td { background: #000; }
+    input { width: 70%; padding: 10px; border-radius: 6px; border: 1px solid #444; background: #111; color: #fff; }
+    button { padding: 10px 20px; background: #d4af37; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+    .link-gerado { margin-top: 15px; padding: 15px; background: #1c102b; border: 1px dashed #d4af37; word-break: break-all; display: none; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>Programa de Afiliados - Body Splash</h1>
+    <p>Gere seu link exclusivo de divulgação e ganhe comissões diretas a cada venda confirmada!</p>
+
+    <h2>📊 Tabela de Comissões por Kit</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Kit de Produtos</th>
+          <th>Preço Final</th>
+          <th>Sua Comissão (40%)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Kit 1 (1 Frasco)</td>
+          <td>R$ 40,00</td>
+          <td><strong style="color:#25d366;">R$ 16,00</strong></td>
+        </tr>
+        <tr>
+          <td>Kit 2 (3 Frascos)</td>
+          <td>R$ 120,00</td>
+          <td><strong style="color:#25d366;">R$ 48,00</strong></td>
+        </tr>
+        <tr>
+          <td>Kit 3 (6 Frascos)</td>
+          <td>R$ 210,00</td>
+          <td><strong style="color:#25d366;">R$ 84,00</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>🔗 Gerador de Link do Afiliado</h2>
+    <p>Digite seu nome de usuário/código de afiliado para gerar seu link da Landing Page:</p>
+    <input type="text" id="userAff" placeholder="Ex: joaomarketing">
+    <button onclick="gerarLink()">Gerar Link</button>
+
+    <div id="areaLink" class="link-gerado">
+      <strong>Seu Link de Divulgação:</strong><br>
+      <span id="linkFinal" style="color:#ffd166;"></span>
+    </div>
+  </div>
+
+  <script>
+    function gerarLink() {
+      const aff = document.getElementById('userAff').value.trim();
+      if (!aff) { alert('Digite seu nome de afiliado!'); return; }
+      
+      const baseUrl = window.location.origin + window.location.pathname.replace('afiliados.html', 'ldbodysplash.html');
+      const link = baseUrl + '?aff=' + encodeURIComponent(aff);
+      
+      document.getElementById('linkFinal').innerText = link;
+      document.getElementById('areaLink').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
