@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>¡Gracias por tu compra! - Love Spell Body Splash</title>
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0b0b0b; color: #fff; margin: 0; padding: 20px; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+    .card { background: linear-gradient(180deg, #1c102b, #000); border: 1px solid #d4af37; border-radius: 16px; max-width: 500px; width: 100%; padding: 30px; text-align: center; box-shadow: 0 10px 30px rgba(212,175,55,0.2); }
+    .icon { font-size: 60px; color: #d4af37; margin-bottom: 15px; }
+    h1 { color: #d4af37; margin-bottom: 10px; font-size: 26px; }
+    p { color: #ccc; line-height: 1.6; font-size: 15px; }
+    .btn { display: inline-block; background: #25d366; color: #fff; text-decoration: none; padding: 14px 28px; border-radius: 30px; font-weight: bold; margin-top: 20px; font-size: 16px; transition: 0.3s; }
+    .btn:hover { background: #1eb954; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="icon">✨</div>
+    <h1>¡Pedido Recibido con Éxito!</h1>
+    <p>Gracias por tu compra de <strong>Love Spell Body Splash</strong>.</p>
+    <p>Si elegiste pago por PIX o transferencia, completa el pago en la pantalla del banco para confirmar el despacho inmediato de tu pedido.</p>
+    <p>Si tienes alguna duda o deseas confirmar tu dirección de entrega, presiona el botón abajo para hablar con nuestro equipo:</p>
+    <a href="https://wa.me/5500000000000?text=Hola,%20acabo%20de%20realizar%20un%20pedido%20de%20Body%20Splash" target="_blank" class="btn">💬 Soporte por WhatsApp</a>
+  </div>
+</body>
+</html>
