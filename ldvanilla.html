@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Vanilla Body Splash | Diamond Cosméticos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --primary: #d4af37;
+      --primary-hover: #f3e5ab;
+      --accent: #b8860b;
+      --bg-body: #11050b;
+      --bg-card: rgba(30, 12, 21, 0.85);
+      --text: #e5d8e0;
+      --highlight: #d4af37;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: radial-gradient(circle at top center, #240d1a 0%, #11050b 100%);
+      color: var(--text);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+    a { text-decoration: none; color: inherit; }
+    .page { max-width: 1120px; margin: 0 auto; padding: 24px 16px 40px; }
+
+    header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+    header .logo { font-weight: 800; text-transform: uppercase; color: var(--primary); letter-spacing: 0.15em; font-size: 1.2rem; text-shadow: 0 2px 10px rgba(212, 175, 55, 0.3); }
+    header .secure { font-size: 0.78rem; padding: 6px 14px; border-radius: 999px; border: 1px solid rgba(212,175,55,0.4); color: #d4af37; background: rgba(212, 175, 55, 0.08); }
+
+    /* 1. HERO: FOTO À ESQUERDA, VÍDEO À DIREITA */
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      align-items: center;
+      margin-bottom: 50px;
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      padding: 24px;
+      border-radius: 20px;
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+    }
+    @media (max-width: 850px) { .hero { grid-template-columns: 1fr; } }
+
+    .hero-img-box { text-align: center; }
+    .hero-img-box img { width: 100%; max-height: 420px; object-fit: contain; border-radius: 16px; }
+
+    .hero-video-box { width: 100%; text-align: center; }
+    .hero-video-box video { width: 100%; border-radius: 16px; border: 1px solid rgba(212, 175, 55, 0.3); box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+    .hero-video-box h1 { font-size: 1.6rem; color: #fff; margin-bottom: 12px; text-align: left; }
+    .hero-video-box p { font-size: 0.95rem; color: #a38f9c; text-align: left; margin-bottom: 16px; }
+
+    /* 2. SEÇÃO DE BENEFÍCIOS */
+    .benefits-section { margin-bottom: 50px; }
+    .section-title { text-align: center; color: #fff; font-size: 1.8rem; margin-bottom: 28px; position: relative; }
+    .section-title::after { content: ''; display: block; width: 60px; height: 3px; background: var(--primary); margin: 8px auto 0; border-radius: 2px; }
+
+    .benefits-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    @media (max-width: 850px) { .benefits-grid { grid-template-columns: 1fr; } }
+
+    .benefit-card {
+      background: var(--bg-card);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      padding: 22px;
+      border-radius: 16px;
+      text-align: center;
+    }
+    .benefit-card .icon { font-size: 2rem; margin-bottom: 10px; display: block; }
+    .benefit-card h3 { color: #fff; font-size: 1.1rem; margin-bottom: 8px; }
+    .benefit-card p { font-size: 0.88rem; color: #a38f9c; }
+
+    /* 3. ÂNCORAS / KITS DE OFERTA */
+    .kits-section { margin-bottom: 50px; }
+    .kits-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    @media (max-width: 850px) { .kits-grid { grid-template-columns: 1fr; } }
+
+    .kit-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      border-radius: 20px;
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      padding: 24px;
+      text-align: center;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .kit-card.popular {
+      border-color: var(--primary);
+      box-shadow: 0 0 25px rgba(212, 175, 55, 0.3);
+    }
+    .kit-tag {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, #f5d77f 0%, #d4af37 100%);
+      color: #12070c;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 4px 14px;
+      border-radius: 20px;
+      text-transform: uppercase;
+    }
+
+    /* Desenhos / Grade de Fotos do Produto por Kit */
+    .kit-thumbs { display: flex; justify-content: center; align-items: center; gap: 6px; margin: 16px 0; flex-wrap: wrap; }
+    .kit-thumbs img { width: 55px; height: 65px; object-fit: contain; border-radius: 8px; border: 1px solid rgba(212,175,55,0.3); background: #0d0509; }
+
+    .kit-card h3 { color: #fff; font-size: 1.25rem; margin-top: 8px; }
+    .kit-card .price { font-size: 1.8rem; font-weight: 800; color: var(--primary); margin: 12px 0 4px; }
+    .kit-card .sub-price { font-size: 0.82rem; color: #a38f9c; margin-bottom: 20px; }
+
+    .btn-buy {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      background: linear-gradient(135deg, #f5d77f 0%, #d4af37 50%, #996515 100%);
+      color: #12070c;
+      box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
+      transition: transform 0.2s;
+    }
+    .btn-buy:hover { transform: translateY(-2px); }
+
+    /* 4. PROVA SOCIAL (DEPOIMENTOS) */
+    .social-proof { margin-bottom: 40px; }
+    .reviews-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    @media (max-width: 850px) { .reviews-grid { grid-template-columns: 1fr; } }
+
+    .review-card {
+      background: var(--bg-card);
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      border-radius: 16px;
+      padding: 18px;
+    }
+    .review-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .review-avatar { width: 40px; height: 40px; border-radius: 50%; background: #331525; display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--primary); border: 1px solid var(--primary); }
+    .review-info h4 { color: #fff; font-size: 0.92rem; }
+    .review-stars { color: #d4af37; font-size: 0.8rem; }
+    .review-text { font-size: 0.85rem; color: #a38f9c; line-height: 1.4; }
+
+    footer { text-align: center; margin-top: 50px; font-size: 0.8rem; color: #5a4a55; }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="logo">Diamond Cosméticos</div>
+      <div class="secure">🔒 Compra 100% Segura</div>
+    </header>
+
+    <!-- 1. HERO: FOTO À ESQUERDA E VÍDEO À DIREITA -->
+    <section class="hero">
+      <div class="hero-img-box">
+        <img src="vanilla.jpg" alt="Vanilla Body Splash">
+      </div>
+      <div class="hero-video-box">
+        <h1>Vanilla Body Splash – 200ml</h1>
+        <p>Descubra a combinação perfeita entre a doçura marcante e a elegância da baunilha fina. Assista ao vídeo ao lado e veja a fixação perfeita.</p>
+        <video src="vanilla-video.mp4" controls preload="metadata" poster="vanilla.jpg"></video>
+      </div>
+    </section>
+
+    <!-- 2. BENEFÍCIOS DO PRODUTO -->
+    <section class="benefits-section">
+      <h2 class="section-title">Por que você vai se apaixonar?</h2>
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <span class="icon">✨</span>
+          <h3>Alta Fixação</h3>
+          <p>Fórmula desenvolvida para fixar por horas na pele, mantendo a fragrância viva durante todo o dia.</p>
+        </div>
+        <div class="benefit-card">
+          <span class="icon">🌸</span>
+          <h3>Notas de Baunilha Fina</h3>
+          <p>Fragrância envolvente, suave e marcante sem ser enjoativa. Ideal para todas as ocasiões.</p>
+        </div>
+        <div class="benefit-card">
+          <span class="icon">💧</span>
+          <h3>Sensação de Frescor</h3>
+          <p>Leveza imediata após o banho com toque suave que hidrata e perfuma com elegância.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. ÂNCORAS / KITS DE COMPRA -->
+    <section class="kits-section" id="ofertas">
+      <h2 class="section-title">Escolha o seu Kit Exclusivo</h2>
+      <div class="kits-grid">
+        
+        <!-- KIT 1: 1 FOTO -->
+        <div class="kit-card">
+          <h3>Kit 1 – Experimente</h3>
+          <div class="kit-thumbs">
+            <img src="vanilla.jpg" alt="1 Frasco Vanilla">
+          </div>
+          <p style="color:#a38f9c; font-size:0.85rem;">1 Frasco Vanilla 200ml</p>
+          <div class="price">R$ 120,00</div>
+          <div class="sub-price">à vista ou no cartão</div>
+          <a href="vanilla-ck.html?kit=1" class="btn-buy">COMPRAR KIT 1</a>
+        </div>
+
+        <!-- KIT 2: 3 FOTOS (MAIS VENDIDO) -->
+        <div class="kit-card popular">
+          <span class="kit-tag">MAIS VENDIDO</span>
+          <h3>Kit 2 – Triplo</h3>
+          <div class="kit-thumbs">
+            <img src="vanilla.jpg" alt="Vanilla 1">
+            <img src="vanilla.jpg" alt="Vanilla 2">
+            <img src="vanilla.jpg" alt="Vanilla 3">
+          </div>
+          <p style="color:#a38f9c; font-size:0.85rem;">3 Frascos Vanilla 200ml</p>
+          <div class="price">R$ 210,00</div>
+          <div class="sub-price">(Apenas R$ 70,00 por unidade)</div>
+          <a href="vanilla-ck.html?kit=3" class="btn-buy">COMPRAR KIT 2</a>
+        </div>
+
+        <!-- KIT 3: 6 FOTOS -->
+        <div class="kit-card">
+          <span class="kit-tag" style="background:#fff; color:#12070c;">MELHOR VALOR</span>
+          <h3>Kit 3 – Coleção</h3>
+          <div class="kit-thumbs">
+            <img src="vanilla.jpg" alt="Vanilla 1">
+            <img src="vanilla.jpg" alt="Vanilla 2">
+            <img src="vanilla.jpg" alt="Vanilla 3">
+            <img src="vanilla.jpg" alt="Vanilla 4">
+            <img src="vanilla.jpg" alt="Vanilla 5">
+            <img src="vanilla.jpg" alt="Vanilla 6">
+          </div>
+          <p style="color:#a38f9c; font-size:0.85rem;">6 Frascos Vanilla 200ml</p>
+          <div class="price">R$ 360,00</div>
+          <div class="sub-price">(Apenas R$ 60,00 por unidade)</div>
+          <a href="vanilla-ck.html?kit=6" class="btn-buy">COMPRAR KIT 3</a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 4. PROVA SOCIAL -->
+    <section class="social-proof">
+      <h2 class="section-title">O que nossas clientes dizem</h2>
+      <div class="reviews-grid">
+        <div class="review-card">
+          <div class="review-header">
+            <div class="review-avatar">M</div>
+            <div class="review-info">
+              <h4>Mariana Silva</h4>
+              <div class="review-stars">★★★★★</div>
+            </div>
+          </div>
+          <p class="review-text">"Comprei o kit com 3 frascos e estou apaixonada! O cheiro de baunilha é muito chique e fixa na pele o dia todo. Recomendo demais!"</p>
+        </div>
+
+        <div class="review-card">
+          <div class="review-header">
+            <div class="review-avatar">C</div>
+            <div class="review-info">
+              <h4>Camila Rocha</h4>
+              <div class="review-stars">★★★★★</div>
+            </div>
+          </div>
+          <p class="review-text">"Chegou super rápido aqui em casa. A embalagem é linda e a fragrância é suave e marcante na medida certa."</p>
+        </div>
+
+        <div class="review-card">
+          <div class="review-header">
+            <div class="review-avatar">B</div>
+            <div class="review-info">
+              <h4>Beatriz Lima</h4>
+              <div class="review-stars">★★★★★</div>
+            </div>
+          </div>
+          <p class="review-text">"Aproveitei a promoção de 6 unidades para dar de presente pras minhas irmãs. Todo mundo amou o cheiro!"</p>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      © Diamond Cosméticos - Todos os direitos reservados.
+    </footer>
+  </div>
+</body>
+</html>
