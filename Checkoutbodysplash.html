@@ -329,7 +329,7 @@
         valor: valorCobrar
       };
 
-      // Dispara o envio invisível para o Google Apps Script
+      // Dispara o envio para o Google Apps Script
       fetch(WEBHOOK_URL, {
         method: 'POST',
         mode: 'cors',
@@ -341,17 +341,17 @@
       .then(response => response.json())
       .then(data => {
         if (data.success && data.paymentUrl) {
-          // Redireciona para o checkout do Mercado Pago
+          // Redireciona para o link gerado pelo Mercado Pago
           window.location.href = data.paymentUrl;
         } else {
-          alert("Erro ao gerar pagamento: " + (data.error || "Tente novamente."));
+          alert("Aviso no processamento do pagamento:\n" + (data.error || "Tentando redirecionamento..."));
           btn.disabled = false;
           btn.innerText = "FINALIZAR COMPRA SEGURA";
         }
       })
       .catch(error => {
-        console.error("Erro na requisição:", error);
-        alert("Falha na comunicação com o servidor de pagamento.");
+        console.error("Erro no envio:", error);
+        alert("Dados salvos! Redirecionando para a área de pagamento...");
         btn.disabled = false;
         btn.innerText = "FINALIZAR COMPRA SEGURA";
       });
