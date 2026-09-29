@@ -299,105 +299,35 @@
     });
   </script>
 
-  <!-- SCRIPT COMPLETO DE CONFIGURAÇÃO E INTEGRAÇÃO DIRETA COM A API DO MERCADO PAGO -->
+  <!-- SCRIPT DE ENVIO SEGURO PARA O SCRIPT BACKEND -->
   <script>
-    // ============================================================
-    // CONFIGURAÇÕES DO PROJETO (PREENCHA SEUS DADOS AQUI)
-    // ============================================================
-    
-    // 1. Chaves da API do Mercado Pago
-    const MERCADO_PAGO_ACCESS_TOKEN = "APP_USR-282356112"; // Cole o seu Access Token de Produção (APP_USR-...)
-    const MERCADO_PAGO_PUBLIC_KEY   = "4656278575626755";   // Cole a sua Public Key
+    // URL do Web App do Google Apps Script (Sua URL terminada em /exec)
+    const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbyn7bc2IKducboz7zfLnwcIxQQhKK7biw1ed5vy5Ge78sRgvzXBvE5nQzCB9uFhMbJT-w/exec";
 
-    // 2. Notificação por E-mail e Configuração da Planilha no Drive
-    const EMAILS_NOTIFICACAO = ["danilomeccene@gmail.com"]; 
-    const NOME_PLANILHA_DRIVE = "Vendas_Cosmeticos_MercadoPago";
-
-    // 3. URL do Webhook do Google Apps Script (que receberá o aviso para salvar na planilha)
-    const WEBHOOK_PLANILHA_URL = "https://script.google.com/macros/s/AKfycbyn7bc2IKducboz7zfLnwcIxQQhKK7biw1ed5vy5Ge78sRgvzXBvE5nQzCB9uFhMbJT-w/exec";
-
-
-    // ============================================================
-    // PROCESSAMENTO DO FORMULÁRIO DE COMPRA
-    // ============================================================
-    
-    document.getElementById('formCheckout').addEventListener('submit', async function(e) {
+    document.getElementById('formCheckout').addEventListener('submit', function(e) {
       e.preventDefault();
 
       const btn = document.getElementById('btnPagar');
       if (btn) {
         btn.disabled = true;
-        btn.innerText = "PROCESSANDO PAGAMENTO...";
+        btn.innerText = "REDIRECIONANDO...";
       }
 
-      // Captura o kit e os dados informados
+      // Pega o produto e o valor do kit selecionado
       const selectedRadio = document.querySelector('input[name="kit_radio"]:checked');
       const nomeProduto = selectedRadio ? selectedRadio.getAttribute('data-label') : 'Love Spell Body Splash';
-      const valorCobrar = selectedRadio ? parseFloat(selectedRadio.getAttribute('data-raw-price')) : 120.00;
+      const valorCobrar = selectedRadio ? selectedRadio.getAttribute('data-raw-price') : '120.00';
 
-      const nome     = this.querySelector('input[name="nome"]').value;
-      const email    = this.querySelector('input[name="email"]').value;
-      const telefone = this.querySelector('input[name="telefone"]').value;
-      const endereco = this.querySelector('input[name="endereco"]').value;
-      const bairro   = this.querySelector('input[name="bairro"]').value;
-      const cidade   = this.querySelector('input[name="cidade"]').value;
-      const estado   = this.querySelector('input[name="estado"]').value;
-      const cep      = this.querySelector('input[name="cep"]').value;
+      // Coleta todos os campos preenchidos no formulário
+      const formData = new FormData(this);
+      const params = new URLSearchParams();
 
-      // Objeto da Preferência de Pagamento para envio direto via API ao Mercado Pago
-      const preferenceData = {
-        items: [
-          {
-            title: nomeProduto,
-            quantity: 1,
-            currency_id: "BRL",
-            unit_price: valorCobrar
-          }
-        ],
-        payer: {
-          name: nome,
-          email: email
-        },
-        back_urls: {
-          success: window.location.href,
-          failure: window.location.href,
-          pending: window.location.href
-        },
-        auto_return: "approved",
-        notification_url: WEBHOOK_PLANILHA_URL
-      };
+      formData.forEach((value, key) => params.append(key, value));
+      params.set('produto', nomeProduto);
+      params.set('valor', valorCobrar);
 
-      try {
-        // Envio direto via API para o Mercado Pago
-        const response = await fetch("https://api.mercadopago.com/checkout/preferences", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer " + MERCADO_PAGO_ACCESS_TOKEN.trim()
-          },
-          body: JSON.stringify(preferenceData)
-        });
-
-        const result = await response.json();
-
-        if (result && result.init_point) {
-          // Redirecionamento direto e imediato para a tela de pagamento do Mercado Pago
-          window.location.href = result.init_point;
-        } else {
-          alert("Erro ao gerar o pagamento no Mercado Pago. Verifique o Access Token fornecido.");
-          if (btn) {
-            btn.disabled = false;
-            btn.innerText = "FINALIZAR COMPRA SEGURA";
-          }
-        }
-      } catch (err) {
-        console.error("Erro na comunicação com a API:", err);
-        alert("Falha de conexão com o Mercado Pago. Tente novamente.");
-        if (btn) {
-          btn.disabled = false;
-          btn.innerText = "FINALIZAR COMPRA SEGURA";
-        }
-      }
+      // Redireciona via GET para o servidor seguro gerar a preferência no Mercado Pago
+      window.location.href = WEBHOOK_URL + "?" + params.toString();
     });
   </script>
 </body>
