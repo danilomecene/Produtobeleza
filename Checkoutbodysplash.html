@@ -142,8 +142,7 @@
 
           <label class="kit-option active">
             <input type="radio" name="kit_radio" value="3"
-                   data-label="3 Frascos – Kit Triplo" data-price="R$ 120,00" data-raw-price="120.00" data-detail="(R$ 40,00 por frasco)"
-                   data-mp-link="https://mpago.la/pos/SEU_LINK_KIT_3" checked />
+                   data-label="3 Frascos – Kit Triplo" data-price="R$ 120,00" data-raw-price="120.00" data-detail="(R$ 40,00 por frasco)" checked />
             <div class="info">
               <strong>3 Frascos – Mais Desejado</strong>
               <span>Custo-benefício ideal para o uso no dia a dia.</span>
@@ -152,8 +151,7 @@
 
           <label class="kit-option">
             <input type="radio" name="kit_radio" value="1"
-                   data-label="1 Frasco – 200ml" data-price="R$ 40,00" data-raw-price="40.00" data-detail="à vista no PIX ou cartão"
-                   data-mp-link="https://mpago.la/pos/SEU_LINK_KIT_1" />
+                   data-label="1 Frasco – 200ml" data-price="R$ 40,00" data-raw-price="40.00" data-detail="à vista no PIX ou cartão" />
             <div class="info">
               <strong>1 Frasco – Experimente</strong>
               <span>Perfeito para carregar na bolsa e usar diariamente.</span>
@@ -162,8 +160,7 @@
 
           <label class="kit-option">
             <input type="radio" name="kit_radio" value="6"
-                   data-label="6 Frascos – Coleção Completa" data-price="R$ 210,00" data-raw-price="210.00" data-detail="(R$ 35,00 por frasco)"
-                   data-mp-link="https://mpago.la/pos/SEU_LINK_KIT_6" />
+                   data-label="6 Frascos – Coleção Completa" data-price="R$ 210,00" data-raw-price="210.00" data-detail="(R$ 35,00 por frasco)" />
             <div class="info">
               <strong>6 Frascos – Melhor Valor</strong>
               <span>O menor valor por frasco para garantir seu estoque.</span>
@@ -302,26 +299,105 @@
     });
   </script>
 
-  <!-- SCRIPT DE REDIRECIONAMENTO DIRETO PARA O MERCADO PAGO -->
+  <!-- SCRIPT COMPLETO DE CONFIGURAÇÃO E INTEGRAÇÃO DIRETA COM A API DO MERCADO PAGO -->
   <script>
-    document.getElementById('formCheckout').addEventListener('submit', function(e) {
+    // ============================================================
+    // CONFIGURAÇÕES DO PROJETO (PREENCHA SEUS DADOS AQUI)
+    // ============================================================
+    
+    // 1. Chaves da API do Mercado Pago
+    const MERCADO_PAGO_ACCESS_TOKEN = "APP_USR-282356112"; // Cole o seu Access Token de Produção (APP_USR-...)
+    const MERCADO_PAGO_PUBLIC_KEY   = "4656278575626755";   // Cole a sua Public Key
+
+    // 2. Notificação por E-mail e Configuração da Planilha no Drive
+    const EMAILS_NOTIFICACAO = ["danilomeccene@gmail.com"]; 
+    const NOME_PLANILHA_DRIVE = "Vendas_Cosmeticos_MercadoPago";
+
+    // 3. URL do Webhook do Google Apps Script (que receberá o aviso para salvar na planilha)
+    const WEBHOOK_PLANILHA_URL = "https://script.google.com/macros/s/AKfycbyn7bc2IKducboz7zfLnwcIxQQhKK7biw1ed5vy5Ge78sRgvzXBvE5nQzCB9uFhMbJT-w/exec";
+
+
+    // ============================================================
+    // PROCESSAMENTO DO FORMULÁRIO DE COMPRA
+    // ============================================================
+    
+    document.getElementById('formCheckout').addEventListener('submit', async function(e) {
       e.preventDefault();
 
       const btn = document.getElementById('btnPagar');
       if (btn) {
         btn.disabled = true;
-        btn.innerText = "REDIRECIONANDO...";
+        btn.innerText = "PROCESSANDO PAGAMENTO...";
       }
 
-      // Identifica o kit selecionado
+      // Captura o kit e os dados informados
       const selectedRadio = document.querySelector('input[name="kit_radio"]:checked');
-      
-      // Pega o link do Mercado Pago configurado no data-mp-link da opção escolhida
-      // Se não houver link específico, usa um link padrão
-      const linkMercadoPago = selectedRadio ? selectedRadio.getAttribute('data-mp-link') : 'https://www.mercadopago.com.br';
+      const nomeProduto = selectedRadio ? selectedRadio.getAttribute('data-label') : 'Love Spell Body Splash';
+      const valorCobrar = selectedRadio ? parseFloat(selectedRadio.getAttribute('data-raw-price')) : 120.00;
 
-      // Redireciona imediatamente o comprador para o Mercado Pago
-      window.location.href = linkMercadoPago;
+      const nome     = this.querySelector('input[name="nome"]').value;
+      const email    = this.querySelector('input[name="email"]').value;
+      const telefone = this.querySelector('input[name="telefone"]').value;
+      const endereco = this.querySelector('input[name="endereco"]').value;
+      const bairro   = this.querySelector('input[name="bairro"]').value;
+      const cidade   = this.querySelector('input[name="cidade"]').value;
+      const estado   = this.querySelector('input[name="estado"]').value;
+      const cep      = this.querySelector('input[name="cep"]').value;
+
+      // Objeto da Preferência de Pagamento para envio direto via API ao Mercado Pago
+      const preferenceData = {
+        items: [
+          {
+            title: nomeProduto,
+            quantity: 1,
+            currency_id: "BRL",
+            unit_price: valorCobrar
+          }
+        ],
+        payer: {
+          name: nome,
+          email: email
+        },
+        back_urls: {
+          success: window.location.href,
+          failure: window.location.href,
+          pending: window.location.href
+        },
+        auto_return: "approved",
+        notification_url: WEBHOOK_PLANILHA_URL
+      };
+
+      try {
+        // Envio direto via API para o Mercado Pago
+        const response = await fetch("https://api.mercadopago.com/checkout/preferences", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + MERCADO_PAGO_ACCESS_TOKEN.trim()
+          },
+          body: JSON.stringify(preferenceData)
+        });
+
+        const result = await response.json();
+
+        if (result && result.init_point) {
+          // Redirecionamento direto e imediato para a tela de pagamento do Mercado Pago
+          window.location.href = result.init_point;
+        } else {
+          alert("Erro ao gerar o pagamento no Mercado Pago. Verifique o Access Token fornecido.");
+          if (btn) {
+            btn.disabled = false;
+            btn.innerText = "FINALIZAR COMPRA SEGURA";
+          }
+        }
+      } catch (err) {
+        console.error("Erro na comunicação com a API:", err);
+        alert("Falha de conexão com o Mercado Pago. Tente novamente.");
+        if (btn) {
+          btn.disabled = false;
+          btn.innerText = "FINALIZAR COMPRA SEGURA";
+        }
+      }
     });
   </script>
 </body>
