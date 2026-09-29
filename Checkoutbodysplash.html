@@ -304,31 +304,31 @@
   // COLE AQUI A SUA URL DO GOOGLE APPS SCRIPT
   const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbyn7bc2IKducboz7zfLnwcIxQQhKK7biw1ed5vy5Ge78sRgvzXBvE5nQzCB9uFhMbJT-w/exec";
 
- document.getElementById('formCheckout').addEventListener('submit', function(e) {
+  document.getElementById('formCheckout').addEventListener('submit', function(e) {
     e.preventDefault();
 
     const btn = document.getElementById('btnPagar');
-    btn.disabled = true;
-    btn.innerText = "REDIRECIONANDO...";
+    if (btn) {
+      btn.disabled = true;
+      btn.innerText = "REDIRECIONANDO...";
+    }
 
-    // 1. Identifica qual kit/opção o cliente selecionou
+    // Identifica o kit selecionado pelo comprador
     const selectedRadio = document.querySelector('input[name="kit_radio"]:checked');
-    
-    // Pega o nome e o preço exatamente dos atributos da opção marcada
     const nomeProduto = selectedRadio ? selectedRadio.getAttribute('data-label') : '';
     const valorCobrar = selectedRadio ? selectedRadio.getAttribute('data-raw-price') : '';
 
-    // 2. Prepara os dados para envio
+    // Monta os parâmetros que serão enviados na URL (que o doGet vai ler)
     const formData = new FormData(this);
     const params = new URLSearchParams();
 
     formData.forEach((value, key) => params.append(key, value));
     
-    // Adiciona o produto e valor selecionados dinamicamente
+    // Adiciona produto e valor selecionados
     params.set('produto', nomeProduto);
     params.set('valor', valorCobrar);
 
-    // 3. Redireciona enviando os dados reais selecionados
+    // Redireciona via GET para o Google Apps Script (acionando a função doGet)
     window.location.href = WEBHOOK_URL + "?" + params.toString();
   });
 </script>
