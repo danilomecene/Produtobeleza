@@ -16,7 +16,7 @@
       --highlight: #d4af37;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-   
+    
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background: radial-gradient(circle at top center, #240d1a 0%, #11050b 100%);
@@ -299,9 +299,8 @@
     });
   </script>
 
-  <!-- SCRIPT DE ENVIO SEGURO PARA O SCRIPT BACKEND -->
+  <!-- SCRIPT DE ENVIO DIRETO PARA O GOOGLE APPS SCRIPT -->
   <script>
-    // URL do Web App do Google Apps Script (Sua URL terminada em /exec)
     const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbyn7bc2IKducboz7zfLnwcIxQQhKK7biw1ed5vy5Ge78sRgvzXBvE5nQzCB9uFhMbJT-w/exec";
 
     document.getElementById('formCheckout').addEventListener('submit', function(e) {
@@ -313,20 +312,21 @@
         btn.innerText = "REDIRECIONANDO...";
       }
 
-      // Pega o produto e o valor do kit selecionado
       const selectedRadio = document.querySelector('input[name="kit_radio"]:checked');
       const nomeProduto = selectedRadio ? selectedRadio.getAttribute('data-label') : 'Love Spell Body Splash';
       const valorCobrar = selectedRadio ? selectedRadio.getAttribute('data-raw-price') : '120.00';
 
-      // Coleta todos os campos preenchidos no formulário
       const formData = new FormData(this);
       const params = new URLSearchParams();
 
       formData.forEach((value, key) => params.append(key, value));
-      params.set('produto', nomeProduto);
-      params.set('valor', valorCobrar);
+      
+      // Mapeia exatamente as chaves para o backend
+      params.set('produto_titulo', nomeProduto);
+      params.set('produto_valor', valorCobrar);
+      params.set('produto_qtd', '1');
 
-      // Redireciona via GET para o servidor seguro gerar a preferência no Mercado Pago
+      // Envia os dados para o backend e redireciona
       window.location.href = WEBHOOK_URL + "?" + params.toString();
     });
   </script>
