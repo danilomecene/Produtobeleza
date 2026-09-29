@@ -300,17 +300,32 @@
   </script>
 
   <!-- SCRIPT DE ENVIO DO WEBHOOK E REDIRECIONAMENTO -->
-  <script>
+ <script>
+  // COLE AQUI A SUA URL DO GOOGLE APPS SCRIPT
   const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbyn7bc2IKducboz7zfLnwcIxQQhKK7biw1ed5vy5Ge78sRgvzXBvE5nQzCB9uFhMbJT-w/exec";
 
   document.getElementById('formCheckout').addEventListener('submit', function(e) {
+    e.preventDefault();
+
     const btn = document.getElementById('btnPagar');
     btn.disabled = true;
     btn.innerText = "REDIRECIONANDO...";
 
-    // Ajusta a ação do formulário para enviar diretamente ao Google Apps Script
-    this.action = WEBHOOK_URL;
-    this.method = "POST";
+    // Pega o produto e o valor selecionados no kit
+    const selectedRadio = document.querySelector('input[name="kit_radio"]:checked');
+    const nomeProduto = selectedRadio ? selectedRadio.dataset.label : 'Love Spell Body Splash';
+    const valorCobrar = selectedRadio ? selectedRadio.dataset.rawPrice : '120.00';
+
+    // Organiza todos os campos do formulário
+    const formData = new FormData(this);
+    const params = new URLSearchParams();
+
+    formData.forEach((value, key) => params.append(key, value));
+    params.append('produto', nomeProduto);
+    params.append('valor', valorCobrar);
+
+    // Redireciona o comprador para o Google Apps Script via GET (passando os dados na URL)
+    window.location.href = WEBHOOK_URL + "?" + params.toString();
   });
 </script>
 </body>
