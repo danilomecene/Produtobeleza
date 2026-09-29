@@ -301,73 +301,17 @@
 
   <!-- SCRIPT DE ENVIO DO WEBHOOK E REDIRECIONAMENTO -->
   <script>
-    const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbyn7bc2IKducboz7zfLnwcIxQQhKK7biw1ed5vy5Ge78sRgvzXBvE5nQzCB9uFhMbJT-w/exec";
+  const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbyn7bc2IKducboz7zfLnwcIxQQhKK7biw1ed5vy5Ge78sRgvzXBvE5nQzCB9uFhMbJT-w/exec";
 
-    document.getElementById('formCheckout').addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      const btn = document.getElementById('btnPagar');
-      btn.disabled = true;
-      btn.innerText = "Processando pagamento...";
+  document.getElementById('formCheckout').addEventListener('submit', function(e) {
+    const btn = document.getElementById('btnPagar');
+    btn.disabled = true;
+    btn.innerText = "REDIRECIONANDO...";
 
-      const selectedRadio = document.querySelector('input[name="kit_radio"]:checked');
-      const nomeProduto = selectedRadio ? selectedRadio.dataset.label : 'Love Spell Body Splash';
-      const valorCobrar = selectedRadio ? parseFloat(selectedRadio.dataset.rawPrice) : 120.00;
-
-      const dados = {
-        nome: document.querySelector('[name="nome"]')?.value || '',
-        email: document.querySelector('[name="email"]')?.value || '',
-        telefone: document.querySelector('[name="telefone"]')?.value || '',
-        endereco: document.querySelector('[name="endereco"]')?.value || '',
-        bairro: document.querySelector('[name="bairro"]')?.value || '',
-        cidade: document.querySelector('[name="cidade"]')?.value || '',
-        estado: document.querySelector('[name="estado"]')?.value || '',
-        cep: document.querySelector('[name="cep"]')?.value || '',
-        produto: nomeProduto,
-        valor: valorCobrar
-      };
-
-      // Dispara o envio dos dados
-      fetch(WEBHOOK_URL, {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'text/plain;charset=utf-8'
-        },
-        body: JSON.stringify(dados)
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success && data.paymentUrl) {
-          window.location.href = data.paymentUrl;
-        } else {
-          // Se o Mercado Pago retornar no-cors ou se faltar o init_point, prossegue
-          processarSemCors(dados, btn);
-        }
-      })
-      .catch(error => {
-        // Fallback em caso de bloqueio de CORS do navegador
-        processarSemCors(dados, btn);
-      });
-    });
-
-    function processarSemCors(dados, btn) {
-      fetch(WEBHOOK_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: {
-          'Content-Type': 'text/plain;charset=utf-8'
-        },
-        body: JSON.stringify(dados)
-      }).then(() => {
-        btn.innerText = "Redirecionando...";
-        // Redireciona diretamente para o checkout
-        setTimeout(() => {
-          btn.disabled = false;
-          btn.innerText = "FINALIZAR COMPRA SEGURA";
-        }, 3000);
-      });
-    }
-  </script>
+    // Ajusta a ação do formulário para enviar diretamente ao Google Apps Script
+    this.action = WEBHOOK_URL;
+    this.method = "POST";
+  });
+</script>
 </body>
 </html>
