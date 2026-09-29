@@ -173,8 +173,6 @@
       <section class="checkout-box">
         <h2>Dados de Entrega</h2>
         <form id="formCheckout">
-          <input type="hidden" name="kit" id="kitInput" value="3" />
-
           <div class="field">
             <label>Nome Completo</label>
             <input type="text" name="nome" placeholder="Digite seu nome e sobrenome" required />
@@ -216,13 +214,6 @@
               <input type="text" name="cep" placeholder="00000-000" required />
             </div>
           </div>
-          
-          <div class="field">
-            <label>País</label>
-            <select name="pais">
-              <option value="BR">Brasil</option>
-            </select>
-          </div>
 
           <button type="submit" id="btnPagar" class="btn-submit">
             FINALIZAR COMPRA SEGURA
@@ -241,16 +232,14 @@
   <!-- LÓGICA DE SELEÇÃO DOS KITS -->
   <script>
     const kitRadios = document.querySelectorAll('input[name="kit_radio"]');
-    const kitInput = document.getElementById('kitInput');
     const kitLabel = document.getElementById('kitLabel');
     const kitPrice = document.getElementById('kitPrice');
     const kitDetail = document.getElementById('kitPriceDetail');
     const kitOptions = document.querySelectorAll('.kit-option');
 
     function updateCheckout(radio) {
-      const { value, dataset } = radio;
+      const { dataset } = radio;
       
-      kitInput.value = value;
       kitLabel.textContent = dataset.label;
       kitPrice.textContent = dataset.price;
       kitDetail.textContent = dataset.detail;
@@ -299,7 +288,7 @@
     });
   </script>
 
-  <!-- SCRIPT DE ENVIO DIRETO PARA O GOOGLE APPS SCRIPT -->
+  <!-- SCRIPT DE ENVIO DIRETO CORRIGIDO PARA O GOOGLE APPS SCRIPT -->
   <script>
     const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbyn7bc2IKducboz7zfLnwcIxQQhKK7biw1ed5vy5Ge78sRgvzXBvE5nQzCB9uFhMbJT-w/exec";
 
@@ -321,12 +310,11 @@
 
       formData.forEach((value, key) => params.append(key, value));
       
-      // Mapeia exatamente as chaves para o backend
-      params.set('produto_titulo', nomeProduto);
-      params.set('produto_valor', valorCobrar);
-      params.set('produto_qtd', '1');
+      // Ajustado exatamente para bater com as variáveis do backend (params.produto e params.valor)
+      params.set('produto', nomeProduto);
+      params.set('valor', valorCobrar);
 
-      // Envia os dados para o backend e redireciona
+      // Redireciona enviando todos os dados limpos via GET
       window.location.href = WEBHOOK_URL + "?" + params.toString();
     });
   </script>
