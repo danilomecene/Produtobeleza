@@ -142,7 +142,8 @@
 
           <label class="kit-option active">
             <input type="radio" name="kit_radio" value="3"
-                   data-label="3 Frascos – Kit Triplo" data-price="R$ 120,00" data-raw-price="120.00" data-detail="(R$ 40,00 por frasco)" checked />
+                   data-label="3 Frascos – Kit Triplo" data-price="R$ 120,00" data-raw-price="120.00" data-detail="(R$ 40,00 por frasco)"
+                   data-mp-link="https://mpago.la/pos/SEU_LINK_KIT_3" checked />
             <div class="info">
               <strong>3 Frascos – Mais Desejado</strong>
               <span>Custo-benefício ideal para o uso no dia a dia.</span>
@@ -151,7 +152,8 @@
 
           <label class="kit-option">
             <input type="radio" name="kit_radio" value="1"
-                   data-label="1 Frasco – 200ml" data-price="R$ 40,00" data-raw-price="40.00" data-detail="à vista no PIX ou cartão" />
+                   data-label="1 Frasco – 200ml" data-price="R$ 40,00" data-raw-price="40.00" data-detail="à vista no PIX ou cartão"
+                   data-mp-link="https://mpago.la/pos/SEU_LINK_KIT_1" />
             <div class="info">
               <strong>1 Frasco – Experimente</strong>
               <span>Perfeito para carregar na bolsa e usar diariamente.</span>
@@ -160,7 +162,8 @@
 
           <label class="kit-option">
             <input type="radio" name="kit_radio" value="6"
-                   data-label="6 Frascos – Coleção Completa" data-price="R$ 210,00" data-raw-price="210.00" data-detail="(R$ 35,00 por frasco)" />
+                   data-label="6 Frascos – Coleção Completa" data-price="R$ 210,00" data-raw-price="210.00" data-detail="(R$ 35,00 por frasco)"
+                   data-mp-link="https://mpago.la/pos/SEU_LINK_KIT_6" />
             <div class="info">
               <strong>6 Frascos – Melhor Valor</strong>
               <span>O menor valor por frasco para garantir seu estoque.</span>
@@ -299,38 +302,27 @@
     });
   </script>
 
-  <!-- SCRIPT DE ENVIO DO WEBHOOK E REDIRECIONAMENTO -->
- <script>
-  // COLE AQUI A SUA URL DO GOOGLE APPS SCRIPT
-  const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbyn7bc2IKducboz7zfLnwcIxQQhKK7biw1ed5vy5Ge78sRgvzXBvE5nQzCB9uFhMbJT-w/exec";
+  <!-- SCRIPT DE REDIRECIONAMENTO DIRETO PARA O MERCADO PAGO -->
+  <script>
+    document.getElementById('formCheckout').addEventListener('submit', function(e) {
+      e.preventDefault();
 
-  document.getElementById('formCheckout').addEventListener('submit', function(e) {
-    e.preventDefault();
+      const btn = document.getElementById('btnPagar');
+      if (btn) {
+        btn.disabled = true;
+        btn.innerText = "REDIRECIONANDO...";
+      }
 
-    const btn = document.getElementById('btnPagar');
-    if (btn) {
-      btn.disabled = true;
-      btn.innerText = "REDIRECIONANDO...";
-    }
+      // Identifica o kit selecionado
+      const selectedRadio = document.querySelector('input[name="kit_radio"]:checked');
+      
+      // Pega o link do Mercado Pago configurado no data-mp-link da opção escolhida
+      // Se não houver link específico, usa um link padrão
+      const linkMercadoPago = selectedRadio ? selectedRadio.getAttribute('data-mp-link') : 'https://www.mercadopago.com.br';
 
-    // Identifica o kit selecionado pelo comprador
-    const selectedRadio = document.querySelector('input[name="kit_radio"]:checked');
-    const nomeProduto = selectedRadio ? selectedRadio.getAttribute('data-label') : '';
-    const valorCobrar = selectedRadio ? selectedRadio.getAttribute('data-raw-price') : '';
-
-    // Monta os parâmetros que serão enviados na URL (que o doGet vai ler)
-    const formData = new FormData(this);
-    const params = new URLSearchParams();
-
-    formData.forEach((value, key) => params.append(key, value));
-    
-    // Adiciona produto e valor selecionados
-    params.set('produto', nomeProduto);
-    params.set('valor', valorCobrar);
-
-    // Redireciona via GET para o Google Apps Script (acionando a função doGet)
-    window.location.href = WEBHOOK_URL + "?" + params.toString();
-  });
-</script>
+      // Redireciona imediatamente o comprador para o Mercado Pago
+      window.location.href = linkMercadoPago;
+    });
+  </script>
 </body>
 </html>
