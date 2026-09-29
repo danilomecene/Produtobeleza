@@ -304,27 +304,31 @@
   // COLE AQUI A SUA URL DO GOOGLE APPS SCRIPT
   const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbyn7bc2IKducboz7zfLnwcIxQQhKK7biw1ed5vy5Ge78sRgvzXBvE5nQzCB9uFhMbJT-w/exec";
 
-  document.getElementById('formCheckout').addEventListener('submit', function(e) {
+ document.getElementById('formCheckout').addEventListener('submit', function(e) {
     e.preventDefault();
 
     const btn = document.getElementById('btnPagar');
     btn.disabled = true;
     btn.innerText = "REDIRECIONANDO...";
 
-    // Pega o produto e o valor selecionados no kit
+    // 1. Identifica qual kit/opção o cliente selecionou
     const selectedRadio = document.querySelector('input[name="kit_radio"]:checked');
-    const nomeProduto = selectedRadio ? selectedRadio.dataset.label : 'Love Spell Body Splash';
-    const valorCobrar = selectedRadio ? selectedRadio.dataset.rawPrice : '120.00';
+    
+    // Pega o nome e o preço exatamente dos atributos da opção marcada
+    const nomeProduto = selectedRadio ? selectedRadio.getAttribute('data-label') : '';
+    const valorCobrar = selectedRadio ? selectedRadio.getAttribute('data-raw-price') : '';
 
-    // Organiza todos os campos do formulário
+    // 2. Prepara os dados para envio
     const formData = new FormData(this);
     const params = new URLSearchParams();
 
     formData.forEach((value, key) => params.append(key, value));
-    params.append('produto', nomeProduto);
-    params.append('valor', valorCobrar);
+    
+    // Adiciona o produto e valor selecionados dinamicamente
+    params.set('produto', nomeProduto);
+    params.set('valor', valorCobrar);
 
-    // Redireciona o comprador para o Google Apps Script via GET (passando os dados na URL)
+    // 3. Redireciona enviando os dados reais selecionados
     window.location.href = WEBHOOK_URL + "?" + params.toString();
   });
 </script>
